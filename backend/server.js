@@ -1,5 +1,6 @@
 import express from "express";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const app = express();
 const PORT = 8000;
@@ -9,6 +10,7 @@ const users = [
     password: "1234",
   },
 ];
+const SECRET_KEY = "QPafrMqOBuUPSpSj01N4+qDsUfGXibHINdNOz/0fPDk=";
 app.use(express.json());
 
 app.get("/", (req, res) => {
@@ -38,7 +40,12 @@ app.post("/login", async (req, res) => {
   }
   try {
     if (await bcrypt.compare(req.body.password, user.password)) {
-      res.send(`Welcome Home ${name}`);
+      const token = jwt.sign({ name: user.name }, SECRET_KEY);
+
+      res.json({
+        message: "Login successful",
+        token: token,
+      });
     } else {
       res.send("wrong password!");
     }
