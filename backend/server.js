@@ -3,7 +3,6 @@ import bcrypt from "bcrypt";
 
 const app = express();
 const PORT = 8000;
-const salts = 10;
 const users = [
   {
     name: "loki",
@@ -22,7 +21,7 @@ app.get("/users", (req, res) => {
 
 app.post("/users", async (req, res) => {
   try {
-    const hashedPassword = await bcrypt.hash(req.body.password, salts);
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
     const user = { name: req.body.name, password: hashedPassword };
     users.push(user);
     res.status(201).json(users);
