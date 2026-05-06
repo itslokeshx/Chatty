@@ -2,12 +2,22 @@ import express from "express";
 import authoRoutes from "./routes/authoRoutes.js";
 import { Server } from "socket.io";
 import http from "http";
+import { Socket } from "dgram";
 
 const app = express();
 const PORT = 8000;
 const server = http.createServer(app);
-
 const io = new Server(server);
+io.on("connection", (socket) => {
+  console.log(socket.id);
+
+  socket.on("new_message", (data) => {
+    console.log(data);
+
+    io.emit("receive_message", data);
+  });
+});
+
 app.use(express.json());
 app.use("/", authoRoutes);
 server.listen(8000, () => {
