@@ -27,7 +27,7 @@ function Chat() {
       <h1>Global chats!</h1>
       <div>
         {messages.map((chat, index) => {
-          return <p key={index}>{messages.text}</p>;
+          return <p key={index}>{chat.text}</p>;
         })}
       </div>
       <form>
