@@ -1,31 +1,38 @@
 import socket from "../socket/socket";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 function Chat() {
-  const chats = [
-    { text: "hi bruh!" },
-    { text: "Yooo!" },
-    { text: " How are you!" },
-    { text: "How its going there mate!!" },
-  ];
+  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState([]);
   useEffect(() => {
     socket.on("connect", () => {
       console.log(socket.id);
     });
   }, []);
 
+  function handleSubmit() {}
+
   return (
     <div>
       <h1>Welcome to Chatty!</h1>
       <h1>Global chats!</h1>
       <div>
-        {chats.map((chat) => {
-          return <p>{chat.text}</p>;
+        {chats.map((chat, index) => {
+          return <p key={index}>{chat.text}</p>;
         })}
       </div>
       <form>
-        <input type="text" placeholder="Enter your message!" />
+        <input
+          type="text"
+          placeholder="Enter your message!"
+          value={message}
+          onChange={(e) => {
+            e.target.value;
+          }}
+        />
 
-        <button type="submit">Send!</button>
+        <button type="submit" onClick={handleSubmit}>
+          Send!
+        </button>
       </form>
     </div>
   );
