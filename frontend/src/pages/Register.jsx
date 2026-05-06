@@ -19,7 +19,7 @@ function Register() {
     });
     setRegistered(true);
     const data = await response.json();
-    navigate("/chat");
+    navigate("/login");
     console.log(data);
   }
   return (

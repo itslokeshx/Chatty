@@ -5,6 +5,7 @@ function Chat() {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const navigate = useNavigate();
+  const username = localStorage.getItem("username");
   useEffect(() => {
     const token = localStorage.getItem("token");
 
@@ -26,6 +27,7 @@ function Chat() {
   function handleSubmit(e) {
     e.preventDefault();
     socket.emit("new_message", {
+      username: username,
       text: message,
     });
 
@@ -38,7 +40,12 @@ function Chat() {
       <h1>Global chats!</h1>
       <div>
         {messages.map((chat, index) => {
-          return <p key={index}>{chat.text}</p>;
+          return (
+            <>
+              <p>{chat.username}</p>
+              <p key={index}>{chat.text}</p>
+            </>
+          );
         })}
       </div>
       <form>

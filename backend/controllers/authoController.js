@@ -12,6 +12,7 @@ async function login(req, res) {
       const token = jwt.sign({ name: user.name }, SECRET_KEY);
 
       res.json({
+        name: name,
         message: "Login successful",
         token: token,
       });

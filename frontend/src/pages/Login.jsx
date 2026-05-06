@@ -23,6 +23,7 @@ function Login() {
     setLoggedin(true);
     const data = await response.json();
     localStorage.setItem("token", data.token);
+    localStorage.setItem("username", data.name);
     navigate("/chat");
   }
   return (
