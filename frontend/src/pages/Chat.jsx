@@ -13,7 +13,13 @@ function Chat() {
     });
   }, []);
 
-  function handleSubmit() {}
+  function handleSubmit(e) {
+    e.preventDefault();
+    socket.emit("new_message", {
+      text: message,
+    });
+    setMessage("");
+  }
 
   return (
     <div>
@@ -21,7 +27,7 @@ function Chat() {
       <h1>Global chats!</h1>
       <div>
         {messages.map((chat, index) => {
-          return <p key={index}>{chat.text}</p>;
+          return <p key={index}>{messages.text}</p>;
         })}
       </div>
       <form>
@@ -30,7 +36,7 @@ function Chat() {
           placeholder="Enter your message!"
           value={message}
           onChange={(e) => {
-            e.target.value;
+            setMessage(e.target.value);
           }}
         />
 
