@@ -16,7 +16,7 @@ function Chat() {
       <h1>Welcome to Chatty!</h1>
       <h1>Global chats!</h1>
       <div>
-        {chats.map((chat, index) => {
+        {messages.map((chat, index) => {
           return <p key={index}>{chat.text}</p>;
         })}
       </div>
