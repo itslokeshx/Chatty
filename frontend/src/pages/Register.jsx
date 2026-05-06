@@ -1,6 +1,5 @@
 import { useState } from "react";
 function Register() {
-  const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [registered, setRegistered] = useState(false);
@@ -29,11 +28,7 @@ function Register() {
           <h1>Create your account in Chatty!</h1>
           <form>
             <label>Name:</label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            ></input>
+            <input type="text"></input>
             <label>Username:</label>
             <input
               type="text"
