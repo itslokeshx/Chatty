@@ -19,7 +19,7 @@ function Login() {
     });
     setLoggedin(true);
     const data = await response.json();
-    console.log(data);
+    localStorage.setItem("token", data.token);
   }
   return (
     <div>
