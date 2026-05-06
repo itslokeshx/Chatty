@@ -1,9 +1,16 @@
 import socket from "../socket/socket";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 function Chat() {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
+  const navigate = useNavigate();
   useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      navigate("/login");
+    }
     socket.on("connect", () => {
       console.log(socket.id);
     });
