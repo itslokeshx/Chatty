@@ -1,5 +1,5 @@
 import express from "express";
-import authoRoutes from "../routes/authoRoutes.js";
+import authoRoutes from "./routes/authoRoutes.js";
 const app = express();
 const PORT = 8000;
 const users = [];

@@ -1,6 +1,5 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { authoMiddleware } from "./middleware/authomiddleware.js";
 async function login(req, res) {
   const name = req.body.name;
   const user = users.find((u) => u.name === name);
@@ -36,7 +35,7 @@ function home(req, res) {
   res.send("<h1>Server is running!</h1>");
 }
 
-function content(authoMiddleware, req, res) {
+function content(req, res) {
   res.send("<h1>THIS CONTENT IS ONLY FOR LOGGED IN USERS!</h1>");
 }
 export { login, register, home, content };
