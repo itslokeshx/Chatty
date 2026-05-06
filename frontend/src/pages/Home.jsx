@@ -1,4 +1,6 @@
+import { Navigate, useNavigate } from "react-router-dom";
 function Home() {
+  const navigate = useNavigate();
   return (
     <div>
       <h1>Wlecome to chatty!</h1>
@@ -7,13 +9,34 @@ function Home() {
         users in the global chat!
       </p>
       <h3>
-        Old user then <button>Login!</button>
+        Old user then{" "}
+        <button
+          onClick={() => {
+            navigate("/login");
+          }}
+        >
+          Login!
+        </button>
       </h3>
       <h3>
-        new to Chatty then <button>Register!</button>
+        new to Chatty then{" "}
+        <button
+          onClick={() => {
+            navigate("/register");
+          }}
+        >
+          Register!
+        </button>
       </h3>
       <h3>
-        Click here to go chat page! <button>Chattyyyyy!</button>
+        Click here to go chat page!
+        <button
+          onClick={() => {
+            navigate("/chat");
+          }}
+        >
+          Chattyyyyy!
+        </button>
       </h3>
     </div>
   );
