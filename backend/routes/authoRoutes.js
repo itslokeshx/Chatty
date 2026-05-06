@@ -5,7 +5,7 @@ import {
   home,
   content,
 } from "../controllers/authoController.js";
-import authoMiddleware from "../middleware/authomiddleware.js";
+import { authoMiddleware } from "../middleware/authomiddleware.js";
 
 const router = express.Router();
 router.get("/", home);
