@@ -1,4 +1,15 @@
-import { login, register } from "./controllers/authoController.js";
+import express from "express";
+import {
+  login,
+  register,
+  home,
+  content,
+} from "../controllers/authoController.js";
 
-app.post("/login", login);
-app.post("/register", register);
+const router = express.Router();
+router.get("/", home);
+router.get("/content", content);
+router.post("/login", login);
+router.post("/register", register);
+
+export default router;

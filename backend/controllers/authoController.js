@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-
+import { authoMiddleware } from "./middleware/authomiddleware.js";
 async function login(req, res) {
   const name = req.body.name;
   const user = users.find((u) => u.name === name);
@@ -31,4 +31,12 @@ async function register(req, res) {
     res.json({ error: "user creation failed!" });
   }
 }
-export { login, register };
+
+function home(req, res) {
+  res.send("<h1>Server is running!</h1>");
+}
+
+function content(authoMiddleware, req, res) {
+  res.send("<h1>THIS CONTENT IS ONLY FOR LOGGED IN USERS!</h1>");
+}
+export { login, register, home, content };
