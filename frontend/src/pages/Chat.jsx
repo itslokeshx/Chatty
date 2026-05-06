@@ -7,6 +7,10 @@ function Chat() {
     socket.on("connect", () => {
       console.log(socket.id);
     });
+
+    socket.on("receive_message", (data) => {
+      setMessages((prevChats) => [...prevChats, data]);
+    });
   }, []);
 
   function handleSubmit() {}
