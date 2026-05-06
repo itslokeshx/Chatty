@@ -37,6 +37,6 @@ function home(req, res) {
 }
 
 function content(req, res) {
-  res.send("<h1>THIS CONTENT IS ONLY FOR LOGGED IN USERS!</h1>");
+  res.send(`<h1>Welcome ${req.user.name}</h1>`);
 }
 export { login, register, home, content };
