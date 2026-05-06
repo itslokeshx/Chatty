@@ -1,3 +1,5 @@
+import socket from "../socket/socket";
+import { useEffect } from "react";
 function Chat() {
   const chats = [
     { text: "hi bruh!" },
@@ -5,6 +7,12 @@ function Chat() {
     { text: " How are you!" },
     { text: "How its going there mate!!" },
   ];
+  useEffect(() => {
+    socket.on("connect", () => {
+      console.log(socket.id);
+    });
+  }, []);
+
   return (
     <div>
       <h1>Welcome to Chatty!</h1>
