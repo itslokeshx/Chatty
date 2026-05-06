@@ -9,8 +9,8 @@ import { authoMiddleware } from "../middleware/authomiddleware.js";
 
 const router = express.Router();
 router.get("/", home);
-router.get("/content", content);
+router.get("/content", authoMiddleware, content);
 router.post("/login", login);
-router.post("/register", authoMiddleware, register);
+router.post("/register", register);
 
 export default router;
