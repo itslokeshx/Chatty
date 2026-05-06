@@ -2,9 +2,10 @@ import express from "express";
 import authoRoutes from "./routes/authoRoutes.js";
 import { Server } from "socket.io";
 import http from "http";
-import { Socket } from "dgram";
+import cors from "cors";
 
 const app = express();
+app.use(cors());
 const PORT = 8000;
 const server = http.createServer(app);
 const io = new Server(server, {
