@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { users, SECRET_KEY } from "../authState.js";
 async function login(req, res) {
   const name = req.body.name;
   const user = users.find((u) => u.name === name);

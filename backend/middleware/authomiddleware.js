@@ -1,3 +1,6 @@
+import jwt from "jsonwebtoken";
+import { SECRET_KEY } from "../authState.js";
+
 function authoMiddleware(req, res, next) {
   const authHeader = req.headers.authorization;
   if (!authHeader) {
