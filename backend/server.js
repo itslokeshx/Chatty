@@ -5,7 +5,7 @@ import http from "http";
 
 const app = express();
 const PORT = 8000;
-const server = http.createServer();
+const server = http.createServer(app);
 
 const io = new Server(server);
 app.use(express.json());
