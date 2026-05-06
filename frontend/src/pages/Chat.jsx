@@ -11,6 +11,9 @@ function Chat() {
     socket.on("receive_message", (data) => {
       setMessages((prevChats) => [...prevChats, data]);
     });
+    return () => {
+      socket.off("receive_message");
+    };
   }, []);
 
   function handleSubmit(e) {
@@ -18,6 +21,7 @@ function Chat() {
     socket.emit("new_message", {
       text: message,
     });
+
     setMessage("");
   }
 
