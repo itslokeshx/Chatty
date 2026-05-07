@@ -4,6 +4,7 @@ import { Server } from "socket.io";
 import http from "http";
 import cors from "cors";
 import connectDB from "./config/db.js";
+import Messages from "./models/messages.js";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -20,8 +21,12 @@ const io = new Server(server, {
 io.on("connection", (socket) => {
   console.log(socket.id);
 
-  socket.on("new_message", (data) => {
+  socket.on("new_message", async (data) => {
     console.log(data);
+    await Messages.create({
+      username: data.username,
+      text: data.text,
+    });
 
     io.emit("receive_message", data);
   });
