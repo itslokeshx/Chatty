@@ -3,8 +3,12 @@ import authoRoutes from "./routes/authoRoutes.js";
 import { Server } from "socket.io";
 import http from "http";
 import cors from "cors";
+import connectDB from "./config/db.js";
+import dotenv from "dotenv";
+dotenv.config();
 
 const app = express();
+connectDB();
 app.use(cors());
 const PORT = 8000;
 const server = http.createServer(app);
