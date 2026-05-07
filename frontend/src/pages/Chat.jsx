@@ -11,6 +11,14 @@ function Chat() {
   const username = localStorage.getItem("username");
   const currentUser = username;
 
+  // Check authentication - redirect to login if not logged in
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+    }
+  }, [navigate]);
+
   // Scroll to bottom of messages
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -23,6 +31,7 @@ function Chat() {
   useEffect(() => {
     async function fetchMessages() {
       const token = localStorage.getItem("token");
+      if (!token) return; // Don't fetch if not authenticated
 
       socket.on("connect", () => {
         console.log("Connected:", socket.id);
