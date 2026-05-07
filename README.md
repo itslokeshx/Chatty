@@ -1,8 +1,8 @@
-# CHATTY
+# CHATTY 💬
 
 A real-time messaging app built with React, Node.js, and Socket.io.
 
-## What It Does
+## What It Does ✨
 
 - **Real-time messaging** — Send and receive messages instantly
 - **Global chat room** — Everyone joins the same conversation
@@ -10,7 +10,7 @@ A real-time messaging app built with React, Node.js, and Socket.io.
 - **Message timestamps** — See when each message was sent
 - **Mobile responsive** — Works on desktop and mobile devices
 
-## Tech Stack
+## Tech Stack 🧰
 
 - **Frontend:** React 18, Vite, React Router
 - **Backend:** Node.js, Express
@@ -18,7 +18,7 @@ A real-time messaging app built with React, Node.js, and Socket.io.
 - **Database:** MongoDB
 - **Auth:** JWT (JSON Web Tokens)
 
-## Quick Start
+## Quick Start 🚀
 
 ```bash
 # 1. Clone & Install
@@ -39,9 +39,10 @@ cd frontend && npm run dev   # Terminal 2
 # Visit http://localhost:5173
 ```
 
-## Deployment
+## Deployment 🌐
 
 **Backend (Render/Railway):**
+
 ```
 PORT=8000
 JWT_SECRET=your_production_secret
@@ -49,11 +50,12 @@ FRONTEND_URL=https://your-frontend.vercel.app
 ```
 
 **Frontend (Vercel/Netlify):**
+
 ```
 VITE_API_URL=https://your-backend.render.com
 ```
 
-## API
+## API 🔌
 
 ```http
 POST /login       { name, password } → { token, name }
@@ -63,7 +65,7 @@ GET  /messages    → [ { username, text, createdAt } ]
 WebSocket: new_message → receive_message
 ```
 
-## Architecture
+## Architecture 🧱
 
 ### System Design
 
@@ -80,6 +82,7 @@ WebSocket: new_message → receive_message
 ### Data Flow
 
 **Authentication:**
+
 ```
 User enters credentials
         │
@@ -97,6 +100,7 @@ Redirect to /chat
 ```
 
 **Messaging:**
+
 ```
 User types message
         │
@@ -113,7 +117,7 @@ Server broadcasts to all clients
 Socket.on("receive_message") updates UI
 ```
 
-## How It Works
+## How It Works 🛠️
 
 ### Authentication Flow
 
@@ -155,6 +159,7 @@ Socket.on("receive_message") updates UI
 ### Database Schema
 
 **Users Collection:**
+
 ```javascript
 {
   username: String,    // unique, required
@@ -163,6 +168,7 @@ Socket.on("receive_message") updates UI
 ```
 
 **Messages Collection:**
+
 ```javascript
 {
   username: String,    // sender name
@@ -171,7 +177,7 @@ Socket.on("receive_message") updates UI
 }
 ```
 
-## File Structure
+## File Structure 🗂️
 
 ```
 Chatty/
@@ -210,23 +216,26 @@ Chatty/
 ## Environment Variables
 
 ### Backend (.env)
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `PORT` | Server port | No (default: 8000) |
-| `JWT_SECRET` | Secret for JWT signing | Yes |
-| `MONGODB_URI` | MongoDB connection URL | No (uses local) |
+
+| Variable       | Description              | Required            |
+| -------------- | ------------------------ | ------------------- |
+| `PORT`         | Server port              | No (default: 8000)  |
+| `JWT_SECRET`   | Secret for JWT signing   | Yes                 |
+| `MONGODB_URI`  | MongoDB connection URL   | No (uses local)     |
 | `FRONTEND_URL` | Frontend domain for CORS | No (for production) |
 
 ### Frontend (.env)
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `VITE_API_URL` | Backend URL | Yes |
+
+| Variable       | Description | Required |
+| -------------- | ----------- | -------- |
+| `VITE_API_URL` | Backend URL | Yes      |
 
 ## API Endpoints
 
 ### Authentication
 
 **POST /register**
+
 ```
 Request:  { name: "username", password: "password" }
 Response: { message: "Account created!" }
@@ -234,6 +243,7 @@ Errors:   409 if username exists
 ```
 
 **POST /login**
+
 ```
 Request:  { name: "username", password: "password" }
 Response: { token: "jwt_token", name: "username" }
@@ -241,6 +251,7 @@ Errors:   404 if user not found, 401 if wrong password
 ```
 
 **GET /messages**
+
 ```
 Response: [{ username, text, createdAt }]
 Returns all chat messages, sorted by time
@@ -248,12 +259,12 @@ Returns all chat messages, sorted by time
 
 ### WebSocket Events
 
-| Event | Direction | Payload | Description |
-|-------|-----------|---------|-------------|
-| `new_message` | Client → Server | `{ username, text }` | Send message |
-| `receive_message` | Server → Client | `{ username, text, createdAt }` | Receive message |
-| `connect` | Both | Socket ID | Connection established |
-| `disconnect` | Both | - | Connection closed |
+| Event             | Direction       | Payload                         | Description            |
+| ----------------- | --------------- | ------------------------------- | ---------------------- |
+| `new_message`     | Client → Server | `{ username, text }`            | Send message           |
+| `receive_message` | Server → Client | `{ username, text, createdAt }` | Receive message        |
+| `connect`         | Both            | Socket ID                       | Connection established |
+| `disconnect`      | Both            | -                               | Connection closed      |
 
 ## Security
 
