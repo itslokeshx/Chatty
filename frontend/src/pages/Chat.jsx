@@ -29,7 +29,7 @@ function Chat() {
       });
 
       try {
-        const response = await fetch("http://localhost:8000/messages");
+        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/messages`);
         const data = await response.json();
         setMessages(data);
       } catch (error) {

@@ -1,3 +1,6 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import express from "express";
 import authoRoutes from "./routes/authoRoutes.js";
 import { Server } from "socket.io";
@@ -5,17 +8,21 @@ import http from "http";
 import cors from "cors";
 import connectDB from "./config/db.js";
 import Messages from "./models/messages.js";
-import dotenv from "dotenv";
-dotenv.config();
 
 const app = express();
 connectDB();
 app.use(cors());
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
 const server = http.createServer(app);
+
+// CORS origins from env or defaults
+const allowedOrigins = process.env.FRONTEND_URL 
+  ? [process.env.FRONTEND_URL, "http://localhost:5173", "http://localhost:3000"]
+  : ["http://localhost:5173", "http://localhost:3000"];
+
 const io = new Server(server, {
   cors: {
-    origin: ["http://localhost:5173", "http://localhost:3000"],
+    origin: allowedOrigins,
     credentials: true,
   },
 });
@@ -35,6 +42,7 @@ io.on("connection", (socket) => {
 
 app.use(express.json());
 app.use("/", authoRoutes);
-server.listen(8000, () => {
-  console.log(`server running in the port ${PORT}`);
+server.listen(PORT, () => {
+  console.log(`server running on port ${PORT}`);
+  console.log(`CORS allowed origins: ${allowedOrigins.join(', ')}`);
 });

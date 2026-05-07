@@ -65,10 +65,15 @@ cd ../frontend && npm install
 
 ### 2. Configure Environment
 
-Create `backend/.env`:
+**Backend** — Create `backend/.env`:
 ```env
 PORT=8000
 JWT_SECRET=your_random_secret_key
+```
+
+**Frontend** — Create `frontend/.env`:
+```env
+VITE_API_URL=http://localhost:8000
 ```
 
 ### 3. Run the App
@@ -84,6 +89,39 @@ npm run dev
 ```
 
 Visit `http://localhost:5173`
+
+---
+
+## Deployment
+
+### Environment Variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `PORT` | Backend server port | `8000` |
+| `JWT_SECRET` | Secret key for JWT tokens | Required |
+| `MONGODB_URI` | MongoDB connection string | Local DB |
+| `FRONTEND_URL` | Frontend domain for CORS | - |
+| `VITE_API_URL` | Backend URL for frontend | `http://localhost:8000` |
+
+### Production Setup
+
+**Backend (e.g., Railway, Render, Heroku):**
+```bash
+# Set environment variables in dashboard
+PORT=8000
+JWT_SECRET=your_production_secret
+FRONTEND_URL=https://your-frontend.vercel.app
+```
+
+**Frontend (e.g., Vercel, Netlify):**
+```bash
+# Build command
+npm run build
+
+# Environment variable
+VITE_API_URL=https://your-backend.render.com
+```
 
 ---
 
