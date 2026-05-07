@@ -12,14 +12,22 @@ import cron from "node-cron";
 
 const app = express();
 connectDB();
-app.use(cors());
 const PORT = process.env.PORT || 8000;
-const server = http.createServer(app);
 
 // CORS origins from env or defaults
 const allowedOrigins = process.env.FRONTEND_URL 
   ? [process.env.FRONTEND_URL, "http://localhost:5173", "http://localhost:3000"]
   : ["http://localhost:5173", "http://localhost:3000"];
+
+// Configure Express CORS
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true,
+  methods: ["GET", "POST", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
+const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
