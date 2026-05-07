@@ -103,13 +103,14 @@ function Chat() {
         </div>
         <div className="users-list">
           {chatUsers.map((user, index) => (
-            <div key={index} className="user-item">
+            <div key={index} className={`user-item ${user.isYou ? 'you' : ''}`}>
               <div className={`user-avatar ${user.isYou ? 'you' : ''}`}>
                 {getInitials(user.username)}
               </div>
               <div className="user-info">
                 <div className="user-name">
-                  {user.username} {user.isYou && "(You)"}
+                  {user.username}
+                  {user.isYou && <span className="you-indicator">You</span>}
                 </div>
               </div>
             </div>
@@ -129,11 +130,17 @@ function Chat() {
             </div>
           </div>
           <div className="chat-header-actions">
-            <button className="header-btn" onClick={() => navigate("/")} title="Home">
-              ←
+            <button className="header-btn" onClick={() => navigate("/")} title="Back to Home">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M3 12l9-9 9 9M4 10v10a1 1 0 001 1h5m5-11v11a1 1 0 001 1h5"/>
+              </svg>
+              <span>Home</span>
             </button>
-            <button className="header-btn" onClick={handleLogout} title="Logout">
-              ⎋
+            <button className="header-btn" onClick={handleLogout} title="Sign Out">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+              </svg>
+              <span>Leave</span>
             </button>
           </div>
         </header>
@@ -156,8 +163,10 @@ function Chat() {
                   key={index} 
                   className={`message-group ${isOutgoing ? 'outgoing' : 'incoming'}`}
                 >
-                  {!isOutgoing && showSender && (
-                    <div className="message-sender">{chat.username}</div>
+                  {showSender && (
+                    <div className="message-sender">
+                      {isOutgoing ? 'You' : chat.username}
+                    </div>
                   )}
                   <div className="message-bubble">
                     {chat.text}
@@ -187,8 +196,11 @@ function Chat() {
               type="submit" 
               className="input-btn send-btn"
               disabled={!message.trim()}
+              aria-label="Send message"
             >
-              ↑
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{width: '20px', height: '20px'}}>
+                <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+              </svg>
             </button>
           </form>
         </div>
