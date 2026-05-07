@@ -5,25 +5,36 @@ function Register() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
   async function handleSubmit(e) {
     e.preventDefault();
-    setError("");
+    setErrors({});
 
     // Validation
+    const newErrors = {};
+    if (!username.trim()) {
+      newErrors.username = "Username is required";
+    } else if (username.length < 3) {
+      newErrors.username = "Username must be at least 3 characters";
+    }
+    
+    if (!password) {
+      newErrors.password = "Password is required";
+    } else if (password.length < 4) {
+      newErrors.password = "Password must be at least 4 characters";
+    }
+    
     if (password !== confirmPassword) {
-      setError("Passwords do not match");
-      return;
+      newErrors.confirmPassword = "Passwords do not match";
     }
-    if (password.length < 4) {
-      setError("Password must be at least 4 characters");
-      return;
-    }
-    if (username.length < 3) {
-      setError("Username must be at least 3 characters");
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       return;
     }
 
@@ -36,7 +47,7 @@ function Register() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name: username,
+          name: username.trim(),
           password: password,
         }),
       });
@@ -46,87 +57,130 @@ function Register() {
       if (response.ok) {
         navigate("/login");
       } else {
-        setError(data.message || "Registration failed. Try a different username.");
+        const errorMsg = data.message?.toLowerCase() || "";
+        if (errorMsg.includes("username") || errorMsg.includes("exists")) {
+          setErrors({ username: "Username already taken" });
+        } else {
+          setErrors({ general: data.message || "Registration failed. Please try again." });
+        }
       }
     } catch (err) {
-      setError("Connection failed. Please try again.");
+      setErrors({ general: "Connection failed. Please check your internet." });
     } finally {
       setIsLoading(false);
     }
   }
 
+  const EyeIcon = ({ visible }) => (
+    visible ? (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M3 3l18 18"/>
+      </svg>
+    ) : (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+        <circle cx="12" cy="12" r="3"/>
+      </svg>
+    )
+  );
+
   return (
     <div className="auth-container">
       <div className="auth-card">
         <div className="auth-header">
-          <h1 className="auth-title">
-            Join <span>CHATTY</span>
-          </h1>
-          <p className="auth-subtitle">Create your warrior account</p>
+          <h1 className="auth-title">Create Account</h1>
+          <p className="auth-subtitle">Join CHATTY today</p>
         </div>
 
         <form className="auth-form" onSubmit={handleSubmit}>
-          {error && (
-            <div style={{ 
-              color: '#ff6b6b', 
-              fontSize: '0.9rem', 
-              textAlign: 'center',
-              padding: '0.75rem',
-              background: 'rgba(255, 107, 107, 0.1)',
-              borderRadius: '8px',
-              border: '1px solid rgba(255, 107, 107, 0.3)'
-            }}>
-              {error}
+          {errors.general && (
+            <div className="auth-error">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 8v4M12 16h.01"/>
+              </svg>
+              {errors.general}
             </div>
           )}
           
           <div className="input-group">
             <label className="input-label">Username</label>
-            <input
-              type="text"
-              className="auth-input"
-              placeholder="Choose a unique username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-              minLength={3}
-            />
+            <div className="input-wrapper">
+              <input
+                type="text"
+                className={`auth-input ${errors.username ? 'error' : ''}`}
+                placeholder="Choose a username"
+                value={username}
+                onChange={(e) => {
+                  setUsername(e.target.value);
+                  if (errors.username) setErrors({ ...errors, username: null });
+                }}
+              />
+            </div>
+            {errors.username && <span className="input-error">{errors.username}</span>}
           </div>
 
           <div className="input-group">
             <label className="input-label">Password</label>
-            <input
-              type="password"
-              className="auth-input"
-              placeholder="Create a strong password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              minLength={4}
-            />
+            <div className="input-wrapper">
+              <input
+                type={showPassword ? "text" : "password"}
+                className={`auth-input ${errors.password ? 'error' : ''}`}
+                placeholder="Create a password"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  if (errors.password) setErrors({ ...errors, password: null });
+                }}
+              />
+              <button 
+                type="button"
+                className="password-toggle"
+                onClick={() => setShowPassword(!showPassword)}
+                tabIndex="-1"
+              >
+                <EyeIcon visible={showPassword} />
+              </button>
+            </div>
+            {errors.password && <span className="input-error">{errors.password}</span>}
           </div>
 
           <div className="input-group">
             <label className="input-label">Confirm Password</label>
-            <input
-              type="password"
-              className="auth-input"
-              placeholder="Confirm your password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-            />
+            <div className="input-wrapper">
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                className={`auth-input ${errors.confirmPassword ? 'error' : ''}`}
+                placeholder="Confirm your password"
+                value={confirmPassword}
+                onChange={(e) => {
+                  setConfirmPassword(e.target.value);
+                  if (errors.confirmPassword) setErrors({ ...errors, confirmPassword: null });
+                }}
+              />
+              <button 
+                type="button"
+                className="password-toggle"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                tabIndex="-1"
+              >
+                <EyeIcon visible={showConfirmPassword} />
+              </button>
+            </div>
+            {errors.confirmPassword && <span className="input-error">{errors.confirmPassword}</span>}
           </div>
 
           <button 
             type="submit" 
             className="auth-btn"
-            disabled={isLoading || !username.trim() || !password.trim() || !confirmPassword.trim()}
+            disabled={isLoading || !username.trim() || !password || !confirmPassword}
           >
             {isLoading ? (
               <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
                 <span className="loading-spinner" style={{ width: '16px', height: '16px', borderWidth: '2px' }}></span>
-                Creating...
+                Creating account...
               </span>
             ) : (
               "Create Account"
@@ -136,7 +190,7 @@ function Register() {
 
         <div className="auth-footer">
           <p className="auth-link">
-            Already a warrior? <Link to="/login">Login</Link>
+            Already have an account? <Link to="/login">Sign in</Link>
           </p>
           <p className="auth-link" style={{ marginTop: '0.75rem' }}>
             <Link to="/" style={{ fontWeight: 400 }}>← Back to home</Link>
