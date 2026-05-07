@@ -65,4 +65,14 @@ function home(req, res) {
 function content(req, res) {
   res.send(`<h1>Welcome ${req.user.name}</h1>`);
 }
+
+export async function getAllUsers(req, res) {
+  try {
+    const users = await usersDetails.find({}, { username: 1, _id: 0 });
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to fetch users" });
+  }
+}
+
 export { messages, login, register, home, content };

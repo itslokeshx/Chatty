@@ -133,7 +133,7 @@ Socket.on("receive_message") updates UI
 2. **Login**
    - Credentials validated against database
    - JWT token generated with 24h expiry
-   - Token and username stored in localStorage
+   - Token stored in localStorage (user info fetched from cloud)
    - Protected routes accessible
 
 3. **Session Management**

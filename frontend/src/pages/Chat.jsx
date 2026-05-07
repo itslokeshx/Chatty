@@ -8,6 +8,7 @@ function Chat() {
   const [messages, setMessages] = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [username, setUsername] = useState("");
+  const [cloudUsers, setCloudUsers] = useState([]);
   const messagesEndRef = useRef(null);
   const navigate = useNavigate();
   const currentUser = username;
@@ -55,7 +56,7 @@ function Chat() {
   }, [messages]);
 
   useEffect(() => {
-    async function fetchMessages() {
+    async function fetchData() {
       const token = localStorage.getItem("token");
       if (!token) return; // Don't fetch if not authenticated
 
@@ -64,15 +65,21 @@ function Chat() {
       });
 
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/messages`);
-        const data = await response.json();
-        setMessages(data);
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+        
+        const msgResponse = await fetch(`${API_URL}/messages`);
+        const msgData = await msgResponse.json();
+        setMessages(msgData);
+
+        const usersResponse = await fetch(`${API_URL}/users`);
+        const usersData = await usersResponse.json();
+        setCloudUsers(usersData.map((u) => u.username));
       } catch (error) {
-        console.error("Failed to fetch messages:", error);
+        console.error("Failed to fetch data:", error);
       }
     }
 
-    fetchMessages();
+    fetchData();
 
     // Listen for new messages
     socket.on("receive_message", (data) => {
@@ -101,11 +108,10 @@ function Chat() {
     navigate("/login");
   }
 
-  // Get unique users from messages
-  const uniqueUsers = [...new Set(messages.map((m) => m.username))];
+  // Get users from cloud DB
   const chatUsers = [
     ...(currentUser ? [{ username: currentUser, isYou: true }] : []),
-    ...uniqueUsers
+    ...cloudUsers
       .filter((u) => u !== currentUser)
       .map((u) => ({ username: u, isYou: false })),
   ];
