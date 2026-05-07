@@ -7,18 +7,23 @@ function Chat() {
   const navigate = useNavigate();
   const username = localStorage.getItem("username");
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    async function fetchMessages() {
+      const token = localStorage.getItem("token");
 
-    if (!token) {
-      navigate("/login");
+      if (!token) {
+        navigate("/login");
+      }
+      socket.on("connect", () => {
+        console.log(socket.id);
+      });
+      const response = await fetch("http://localhost:8000/messages");
+      const data = await response.json();
+      setMessages(data);
+      socket.on("receive_message", (data) => {
+        setMessages((prevChats) => [...prevChats, data]);
+      });
     }
-    socket.on("connect", () => {
-      console.log(socket.id);
-    });
-
-    socket.on("receive_message", (data) => {
-      setMessages((prevChats) => [...prevChats, data]);
-    });
+    fetchMessages();
     return () => {
       socket.off("receive_message");
     };
@@ -41,10 +46,10 @@ function Chat() {
       <div>
         {messages.map((chat, index) => {
           return (
-            <>
+            <div key={index}>
               <p>{chat.username}</p>
               <p key={index}>{chat.text}</p>
-            </>
+            </div>
           );
         })}
       </div>
