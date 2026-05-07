@@ -908,9 +908,26 @@ body {
    RESPONSIVE DESIGN - Clean macOS
    ============================================ */
 
+/* Mobile Members Button - Desktop: hide label, Mobile: show full */
+.mobile-only {
+  display: none;
+}
+
+.mobile-members-btn {
+  display: none;
+}
+
 @media (max-width: 768px) {
   :root {
     --sidebar-width: 0;
+  }
+
+  .mobile-only {
+    display: inline;
+  }
+
+  .mobile-members-btn {
+    display: flex;
   }
 
   .chat-sidebar {
@@ -981,7 +998,42 @@ body {
   }
 
   .chat-header {
-    padding: 0 0.75rem;
+    padding: 0 0.5rem;
+    height: 48px;
+  }
+
+  .chat-header-avatar {
+    width: 28px;
+    height: 28px;
+    font-size: 0.875rem;
+  }
+
+  .chat-header-name {
+    font-size: 0.875rem;
+  }
+
+  .chat-header-status {
+    font-size: 0.6875rem;
+  }
+
+  .chat-header-actions {
+    gap: 0.25rem;
+  }
+
+  .header-btn {
+    padding: 0 8px;
+    height: 28px;
+    font-size: 0;
+    gap: 0;
+  }
+
+  .header-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .mobile-members-btn .mobile-only {
+    display: none;
   }
 
   .messages-wrapper {
