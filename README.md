@@ -1,8 +1,11 @@
-# CHATTY 💬
+# CHATTY ✧
 
-A real-time messaging app built with React, Node.js, and Socket.io.
+A sophisticated real-time messaging app built with React, Node.js, and Socket.io.  
+Proudly built as part of **[The Odin Project](https://www.theodinproject.com/)**.
 
-## What It Does ✨
+**💎 Live Demo:** [https://chatty-six-flax.vercel.app/](https://chatty-six-flax.vercel.app/)
+
+## What It Does ✦
 
 - **Real-time messaging** — Send and receive messages instantly
 - **Global chat room** — Everyone joins the same conversation
@@ -10,7 +13,7 @@ A real-time messaging app built with React, Node.js, and Socket.io.
 - **Message timestamps** — See when each message was sent
 - **Mobile responsive** — Works on desktop and mobile devices
 
-## Tech Stack 🧰
+## Tech Stack ⚡
 
 - **Frontend:** React 18, Vite, React Router
 - **Backend:** Node.js, Express
@@ -18,7 +21,7 @@ A real-time messaging app built with React, Node.js, and Socket.io.
 - **Database:** MongoDB
 - **Auth:** JWT (JSON Web Tokens)
 
-## Quick Start 🚀
+## Quick Start 🏁
 
 ```bash
 # 1. Clone & Install
@@ -39,7 +42,7 @@ cd frontend && npm run dev   # Terminal 2
 # Visit http://localhost:5173
 ```
 
-## Deployment 🌐
+## Deployment 🌍
 
 **Backend (Render/Railway):**
 
@@ -55,7 +58,7 @@ FRONTEND_URL=https://your-frontend.vercel.app
 VITE_API_URL=https://your-backend.render.com
 ```
 
-## API 🔌
+## API 📡
 
 ```http
 POST /login       { name, password } → { token, name }
@@ -65,7 +68,7 @@ GET  /messages    → [ { username, text, createdAt } ]
 WebSocket: new_message → receive_message
 ```
 
-## Architecture 🧱
+## Architecture 🏛️
 
 ### System Design
 
@@ -117,7 +120,7 @@ Server broadcasts to all clients
 Socket.on("receive_message") updates UI
 ```
 
-## How It Works 🛠️
+## How It Works ⚙️
 
 ### Authentication Flow
 
@@ -177,7 +180,7 @@ Socket.on("receive_message") updates UI
 }
 ```
 
-## File Structure 🗂️
+## File Structure 🗄️
 
 ```
 Chatty/
