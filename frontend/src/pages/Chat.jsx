@@ -1,6 +1,7 @@
 import socket from "../socket/socket";
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { Users, Home, LogOut, Send, MessageSquare } from "lucide-react";
 
 function Chat() {
   const [message, setMessage] = useState("");
@@ -156,7 +157,7 @@ function Chat() {
         {/* Chat Header */}
         <header className="chat-header">
           <div className="chat-header-info">
-            <div className="chat-header-avatar">💬</div>
+            <div className="chat-header-avatar"><MessageSquare size={20} /></div>
             <div className="chat-header-title">
               <span className="chat-header-name">Global Chat</span>
               <span className="chat-header-status">
@@ -170,11 +171,7 @@ function Chat() {
               onClick={() => setSidebarOpen(true)}
               title="View Members"
             >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
-                <circle cx="9" cy="7" r="4" />
-                <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
-              </svg>
+              <Users size={18} />
               <span>Members</span>
             </button>
             <button
@@ -182,9 +179,7 @@ function Chat() {
               onClick={() => navigate("/")}
               title="Back to Home"
             >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M3 12l9-9 9 9M4 10v10a1 1 0 001 1h5m5-11v11a1 1 0 001 1h5" />
-              </svg>
+              <Home size={18} />
               <span>Home</span>
             </button>
             <button
@@ -192,9 +187,7 @@ function Chat() {
               onClick={handleLogout}
               title="Sign Out"
             >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-              </svg>
+              <LogOut size={18} />
               <span>Leave</span>
             </button>
           </div>
@@ -204,7 +197,7 @@ function Chat() {
         <div className="messages-wrapper">
           {messages.length === 0 ? (
             <div className="empty-state">
-              <div className="empty-icon">💬</div>
+              <div className="empty-icon"><MessageSquare size={32} /></div>
               <div className="empty-title">No messages yet</div>
               <div className="empty-subtitle">
                 Send a message to start the conversation
@@ -258,15 +251,7 @@ function Chat() {
               disabled={!message.trim()}
               aria-label="Send message"
             >
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                style={{ width: "20px", height: "20px" }}
-              >
-                <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
-              </svg>
+              <Send size={20} strokeWidth={2.5} />
             </button>
           </form>
         </div>
