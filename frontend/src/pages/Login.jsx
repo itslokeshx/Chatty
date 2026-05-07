@@ -50,7 +50,6 @@ function Login() {
       
       if (response.ok && data.token) {
         localStorage.setItem("token", data.token);
-        localStorage.setItem("username", data.name || username);
         navigate("/chat");
       } else {
         // Handle specific error cases based on status code

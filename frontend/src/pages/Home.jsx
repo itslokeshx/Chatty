@@ -1,9 +1,35 @@
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 function Home() {
   const navigate = useNavigate();
+  const [username, setUsername] = useState("");
   const isLoggedIn = !!localStorage.getItem("token");
-  const username = localStorage.getItem("username");
+
+  // Fetch username from API if logged in
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    async function fetchUser() {
+      try {
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+        const response = await fetch(`${API_URL}/api/me`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setUsername(data.name);
+        }
+      } catch (error) {
+        console.error("Failed to fetch user:", error);
+      }
+    }
+
+    fetchUser();
+  }, []);
 
   return (
     <div className="landing-container">
@@ -62,7 +88,6 @@ function Home() {
               className="landing-btn landing-btn-ghost"
               onClick={() => {
                 localStorage.removeItem("token");
-                localStorage.removeItem("username");
                 navigate("/login");
               }}
             >

@@ -15,4 +15,9 @@ router.post("/login", login);
 router.post("/register", register);
 router.get("/messages", messages);
 
+// Get current user from token
+router.get("/api/me", authoMiddleware, (req, res) => {
+  res.json({ name: req.user.name });
+});
+
 export default router;

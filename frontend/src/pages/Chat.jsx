@@ -6,17 +6,42 @@ function Chat() {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [username, setUsername] = useState("");
   const messagesEndRef = useRef(null);
   const navigate = useNavigate();
-  const username = localStorage.getItem("username");
   const currentUser = username;
 
-  // Check authentication - redirect to login if not logged in
+  // Check authentication and fetch user info
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
       navigate("/login");
+      return;
     }
+
+    // Fetch username from API
+    async function fetchUser() {
+      try {
+        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+        const response = await fetch(`${API_URL}/api/me`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setUsername(data.name);
+        } else {
+          // Invalid token
+          localStorage.removeItem("token");
+          navigate("/login");
+        }
+      } catch (error) {
+        console.error("Failed to fetch user:", error);
+      }
+    }
+
+    fetchUser();
   }, [navigate]);
 
   // Scroll to bottom of messages
@@ -72,7 +97,6 @@ function Chat() {
 
   function handleLogout() {
     localStorage.removeItem("token");
-    localStorage.removeItem("username");
     navigate("/login");
   }
 
