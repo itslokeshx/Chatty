@@ -2,7 +2,14 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { SECRET_KEY } from "../authState.js";
 import usersDetails from "../models/users.js";
+import Messages from "../models/messages.js";
 
+//GET: messages:
+
+async function messages(req, res) {
+  const allMessages = await Messages.find();
+  res.status(200).json(allMessages);
+}
 //POST:Login !
 async function login(req, res) {
   const name = req.body.name;
@@ -50,4 +57,4 @@ function home(req, res) {
 function content(req, res) {
   res.send(`<h1>Welcome ${req.user.name}</h1>`);
 }
-export { login, register, home, content };
+export { messages, login, register, home, content };
