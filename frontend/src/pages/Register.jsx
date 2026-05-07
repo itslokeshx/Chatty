@@ -52,13 +52,17 @@ function Register() {
         }),
       });
       
-      const data = await response.json();
+      // Check if response is JSON
+      const contentType = response.headers.get("content-type");
+      const isJson = contentType && contentType.includes("application/json");
+      
+      const data = isJson ? await response.json() : { message: "Unexpected error" };
       
       if (response.ok) {
         navigate("/login");
       } else {
-        const errorMsg = data.message?.toLowerCase() || "";
-        if (errorMsg.includes("username") || errorMsg.includes("exists")) {
+        // Handle specific error cases based on status code
+        if (response.status === 409) {
           setErrors({ username: "Username already taken" });
         } else {
           setErrors({ general: data.message || "Registration failed. Please try again." });

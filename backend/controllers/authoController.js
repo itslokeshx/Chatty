@@ -15,7 +15,7 @@ async function login(req, res) {
   const name = req.body.name;
   const user = await usersDetails.findOne({ username: name });
   if (!user) {
-    return res.status(404).send("user not found,please register!");
+    return res.status(404).json({ message: "User not found" });
   }
   try {
     if (await bcrypt.compare(req.body.password, user.password)) {
@@ -27,14 +27,22 @@ async function login(req, res) {
         token: token,
       });
     } else {
-      res.send("wrong password!");
+      return res.status(401).json({ message: "Wrong password" });
     }
-  } catch (error) {}
+  } catch (error) {
+    return res.status(500).json({ message: "Server error" });
+  }
 }
 
 //POST: Register !
 async function register(req, res) {
   try {
+    // Check if user already exists
+    const existingUser = await usersDetails.findOne({ username: req.body.name });
+    if (existingUser) {
+      return res.status(409).json({ message: "Username already exists" });
+    }
+
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
     const name = req.body.name;
     const password = hashedPassword;
@@ -44,9 +52,9 @@ async function register(req, res) {
       password: password,
     });
 
-    res.status(201).json("Account created!");
+    res.status(201).json({ message: "Account created!" });
   } catch (error) {
-    res.json({ error: "user creation failed!" });
+    res.status(500).json({ message: "Registration failed" });
   }
 }
 

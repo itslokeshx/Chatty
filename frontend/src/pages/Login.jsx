@@ -41,18 +41,21 @@ function Login() {
         }),
       });
       
-      const data = await response.json();
+      // Check if response is JSON
+      const contentType = response.headers.get("content-type");
+      const isJson = contentType && contentType.includes("application/json");
+      
+      const data = isJson ? await response.json() : { message: "Unexpected error" };
       
       if (response.ok && data.token) {
         localStorage.setItem("token", data.token);
         localStorage.setItem("username", data.name || username);
         navigate("/chat");
       } else {
-        // Handle specific error cases
-        const errorMsg = data.message?.toLowerCase() || "";
-        if (errorMsg.includes("user not found") || errorMsg.includes("username")) {
+        // Handle specific error cases based on status code
+        if (response.status === 404) {
           setErrors({ username: "Username not found" });
-        } else if (errorMsg.includes("password") || errorMsg.includes("incorrect")) {
+        } else if (response.status === 401) {
           setErrors({ password: "Incorrect password" });
         } else {
           setErrors({ general: data.message || "Login failed. Please try again." });
