@@ -23,11 +23,11 @@ function Chat() {
   useEffect(() => {
     async function fetchMessages() {
       const token = localStorage.getItem("token");
-      
+
       socket.on("connect", () => {
         console.log("Connected:", socket.id);
       });
-      
+
       try {
         const response = await fetch("http://localhost:8000/messages");
         const data = await response.json();
@@ -36,9 +36,9 @@ function Chat() {
         console.error("Failed to fetch messages:", error);
       }
     }
-    
+
     fetchMessages();
-    
+
     // Listen for new messages
     socket.on("receive_message", (data) => {
       setMessages((prevChats) => [...prevChats, data]);
@@ -52,7 +52,7 @@ function Chat() {
   function handleSubmit(e) {
     e.preventDefault();
     if (!message.trim()) return;
-    
+
     socket.emit("new_message", {
       username: username,
       text: message,
@@ -68,19 +68,19 @@ function Chat() {
   }
 
   // Get unique users from messages
-  const uniqueUsers = [...new Set(messages.map(m => m.username))];
+  const uniqueUsers = [...new Set(messages.map((m) => m.username))];
   const chatUsers = [
     ...(currentUser ? [{ username: currentUser, isYou: true }] : []),
     ...uniqueUsers
-      .filter(u => u !== currentUser)
-      .map(u => ({ username: u, isYou: false }))
+      .filter((u) => u !== currentUser)
+      .map((u) => ({ username: u, isYou: false })),
   ];
 
   // Format timestamp from message
   const formatTime = (timestamp) => {
-    if (!timestamp) return '';
+    if (!timestamp) return "";
     const date = new Date(timestamp);
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   };
 
   // Get avatar initials
@@ -91,20 +91,20 @@ function Chat() {
   return (
     <div className="chat-wrapper">
       {/* Mobile Sidebar Overlay */}
-      <div 
-        className={`sidebar-overlay ${sidebarOpen ? 'open' : ''}`}
+      <div
+        className={`sidebar-overlay ${sidebarOpen ? "open" : ""}`}
         onClick={() => setSidebarOpen(false)}
       />
 
       {/* Sidebar - Users in Chat */}
-      <aside className={`chat-sidebar ${sidebarOpen ? 'open' : ''}`}>
+      <aside className={`chat-sidebar ${sidebarOpen ? "open" : ""}`}>
         <div className="sidebar-header">
           <span className="sidebar-title">In This Chat</span>
         </div>
         <div className="users-list">
           {chatUsers.map((user, index) => (
-            <div key={index} className={`user-item ${user.isYou ? 'you' : ''}`}>
-              <div className={`user-avatar ${user.isYou ? 'you' : ''}`}>
+            <div key={index} className={`user-item ${user.isYou ? "you" : ""}`}>
+              <div className={`user-avatar ${user.isYou ? "you" : ""}`}>
                 {getInitials(user.username)}
               </div>
               <div className="user-info">
@@ -126,19 +126,39 @@ function Chat() {
             <div className="chat-header-avatar">💬</div>
             <div className="chat-header-title">
               <span className="chat-header-name">Global Chat</span>
-              <span className="chat-header-status">{chatUsers.length} members</span>
+              <span className="chat-header-status">
+                {chatUsers.length} members
+              </span>
             </div>
           </div>
           <div className="chat-header-actions">
-            <button className="header-btn" onClick={() => navigate("/")} title="Back to Home">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M3 12l9-9 9 9M4 10v10a1 1 0 001 1h5m5-11v11a1 1 0 001 1h5"/>
+            <button
+              className="header-btn"
+              onClick={() => navigate("/")}
+              title="Back to Home"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M3 12l9-9 9 9M4 10v10a1 1 0 001 1h5m5-11v11a1 1 0 001 1h5" />
               </svg>
               <span>Home</span>
             </button>
-            <button className="header-btn" onClick={handleLogout} title="Sign Out">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+            <button
+              className="header-btn"
+              onClick={handleLogout}
+              title="Sign Out"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
               </svg>
               <span>Leave</span>
             </button>
@@ -151,27 +171,32 @@ function Chat() {
             <div className="empty-state">
               <div className="empty-icon">💬</div>
               <div className="empty-title">No messages yet</div>
-              <div className="empty-subtitle">Send a message to start the conversation</div>
+              <div className="empty-subtitle">
+                Send a message to start the conversation
+              </div>
             </div>
           ) : (
             messages.map((chat, index) => {
               const isOutgoing = chat.username === currentUser;
-              const showSender = index === 0 || messages[index - 1]?.username !== chat.username;
-              
+              const showSender =
+                index === 0 || messages[index - 1]?.username !== chat.username;
+
               return (
-                <div 
-                  key={index} 
-                  className={`message-group ${isOutgoing ? 'outgoing' : 'incoming'}`}
+                <div
+                  key={index}
+                  className={`message-group ${isOutgoing ? "outgoing" : "incoming"}`}
                 >
                   {showSender && (
                     <div className="message-sender">
-                      {isOutgoing ? 'You' : chat.username}
+                      {isOutgoing ? "You" : chat.username}
                     </div>
                   )}
                   <div className="message-bubble">
                     {chat.text}
                     <div className="message-meta">
-                      <span className="message-time">{formatTime(chat.createdAt)}</span>
+                      <span className="message-time">
+                        {formatTime(chat.createdAt)}
+                      </span>
                       {isOutgoing && <span className="message-check">✓</span>}
                     </div>
                   </div>
@@ -188,18 +213,24 @@ function Chat() {
             <input
               type="text"
               className="chat-input"
-              placeholder="iMessage"
+              placeholder="Message"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
             />
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className="input-btn send-btn"
               disabled={!message.trim()}
               aria-label="Send message"
             >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{width: '20px', height: '20px'}}>
-                <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                style={{ width: "20px", height: "20px" }}
+              >
+                <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
               </svg>
             </button>
           </form>
