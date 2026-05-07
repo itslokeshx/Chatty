@@ -19,11 +19,11 @@ function Chat() {
       const response = await fetch("http://localhost:8000/messages");
       const data = await response.json();
       setMessages(data);
-      socket.on("receive_message", (data) => {
-        setMessages((prevChats) => [...prevChats, data]);
-      });
     }
     fetchMessages();
+    socket.on("receive_message", (data) => {
+      setMessages((prevChats) => [...prevChats, data]);
+    });
     return () => {
       socket.off("receive_message");
     };
