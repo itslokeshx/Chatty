@@ -1,15 +1,18 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { users, SECRET_KEY } from "../authState.js";
+import { SECRET_KEY } from "../authState.js";
+import usersDetails from "../models/users.js";
+
+//POST:Login !
 async function login(req, res) {
   const name = req.body.name;
-  const user = users.find((u) => u.name === name);
+  const user = await usersDetails.findOne({ username: name });
   if (!user) {
     return res.status(404).send("user not found,please register!");
   }
   try {
     if (await bcrypt.compare(req.body.password, user.password)) {
-      const token = jwt.sign({ name: user.name }, SECRET_KEY);
+      const token = jwt.sign({ name: user.username }, SECRET_KEY);
 
       res.json({
         name: name,
@@ -22,12 +25,19 @@ async function login(req, res) {
   } catch (error) {}
 }
 
+//POST: Register !
 async function register(req, res) {
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    const user = { name: req.body.name, password: hashedPassword };
-    users.push(user);
-    res.status(201).json(users);
+    const name = req.body.name;
+    const password = hashedPassword;
+
+    const user = await usersDetails.create({
+      username: name,
+      password: password,
+    });
+
+    res.status(201).json("Account created!");
   } catch (error) {
     res.json({ error: "user creation failed!" });
   }
