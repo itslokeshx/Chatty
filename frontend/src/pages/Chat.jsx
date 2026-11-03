@@ -24,11 +24,11 @@ function Chat() {
     // Fetch username from API
     async function fetchUser() {
       try {
-        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+        const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
         const response = await fetch(`${API_URL}/api/me`, {
           headers: {
-            'Authorization': `Bearer ${token}`
-          }
+            Authorization: `Bearer ${token}`,
+          },
         });
         if (response.ok) {
           const data = await response.json();
@@ -65,8 +65,8 @@ function Chat() {
       });
 
       try {
-        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-        
+        const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+
         const msgResponse = await fetch(`${API_URL}/messages`);
         const msgData = await msgResponse.json();
         setMessages(msgData);
@@ -117,10 +117,17 @@ function Chat() {
   ];
 
   // Format timestamp from message
-  const formatTime = (timestamp) => {
+  const formatDateTime = (timestamp) => {
     if (!timestamp) return "";
     const date = new Date(timestamp);
-    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    if (isNaN(date.getTime())) return "";
+    return date.toLocaleTimeString([], {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
   };
 
   // Get avatar initials
@@ -163,7 +170,9 @@ function Chat() {
         {/* Chat Header */}
         <header className="chat-header">
           <div className="chat-header-info">
-            <div className="chat-header-avatar"><MessageSquare size={20} /></div>
+            <div className="chat-header-avatar">
+              <MessageSquare size={20} />
+            </div>
             <div className="chat-header-title">
               <span className="chat-header-name">Global Chat</span>
               <span className="chat-header-status">
@@ -203,7 +212,9 @@ function Chat() {
         <div className="messages-wrapper">
           {messages.length === 0 ? (
             <div className="empty-state">
-              <div className="empty-icon"><MessageSquare size={32} /></div>
+              <div className="empty-icon">
+                <MessageSquare size={32} />
+              </div>
               <div className="empty-title">No messages yet</div>
               <div className="empty-subtitle">
                 Send a message to start the conversation
@@ -229,7 +240,7 @@ function Chat() {
                     {chat.text}
                     <div className="message-meta">
                       <span className="message-time">
-                        {formatTime(chat.createdAt)}
+                        {formatDateTime(chat.createdAt)}
                       </span>
                       {isOutgoing && <span className="message-check">✓</span>}
                     </div>
