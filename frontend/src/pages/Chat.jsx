@@ -98,6 +98,7 @@ function Chat() {
     socket.emit("new_message", {
       username: username,
       text: message,
+      createdAt: new Date().toISOString(),
     });
 
     setMessage("");
